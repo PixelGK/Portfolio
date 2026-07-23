@@ -1,0 +1,122 @@
+@import "tailwindcss";
+
+@theme {
+  /* ---- Color tokens: dusk-over-canopy palette ---- */
+  --color-ink: #0c0f0d;         /* base background */
+  --color-ink-soft: #10130f;    /* section alt background */
+  --color-panel: #161a14;       /* card / panel surface */
+  --color-panel-line: #262b21;  /* hairline borders on panels */
+  --color-gold: #b99356;        /* signature accent — temple brass */
+  --color-gold-soft: #d8b57e;   /* hover / bright gold */
+  --color-foliage: #5c7a5e;     /* secondary accent — jungle green */
+  --color-foliage-soft: #7f9b81;
+  --color-ivory: #efe9dd;       /* primary text */
+  --color-sage: #9a9c8e;        /* muted text */
+  --color-sage-dim: #6c6e62;    /* faint text */
+
+  --font-display: "Fraunces", "Iowan Old Style", serif;
+  --font-body: "Manrope", "Segoe UI", sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-panel-line);
+  }
+
+  html {
+    scroll-behavior: auto;
+    background: var(--color-ink);
+  }
+
+  body {
+    background: var(--color-ink);
+    color: var(--color-ivory);
+    font-family: var(--font-body);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold-soft);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Reduced motion: kill non-essential animation/transition globally */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.001ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.001ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .link-underline {
+    position: relative;
+    text-decoration: none;
+  }
+  .link-underline::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 100%;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: right;
+    transition: transform 0.5s cubic-bezier(0.65, 0, 0.35, 1);
+  }
+  .link-underline:hover::after,
+  .link-underline:focus-visible::after {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+
+  .glass {
+    background: color-mix(in srgb, var(--color-panel) 70%, transparent);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
+
+/* Marquee for "currently exploring" ticker */
+@keyframes marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-track {
+  animation: marquee-scroll 32s linear infinite;
+}
+.marquee-track:hover {
+  animation-play-state: paused;
+}
+@media (prefers-reduced-motion: reduce) {
+  .marquee-track {
+    animation: none;
+  }
+}
